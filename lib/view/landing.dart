@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:mobileapp/view/HomePage.dart';
 import 'package:mobileapp/view/onboarding.dart';
 import 'package:mobileapp/view/screen/played.dart';
-import 'package:mobileapp/view/screen/tv.dart';
 import 'package:mobileapp/view/screen/play.dart';
+import 'package:mobileapp/view/tvlist.dart';
 import '../SharedPref.dart';
 
 class landingPage extends StatefulWidget {
   // late String param;
   // landingPage({Key? key, required this.param}) : super(key: key);
   Function setTheme;
-  final String user;
-
-  landingPage({Key? key, required this.setTheme, required this.user})
+  final movie;
+  landingPage({Key? key, required this.setTheme, required this.movie})
       : super(key: key);
   State<landingPage> createState() => _landingPageState();
 }
@@ -75,29 +74,13 @@ class _landingPageState extends State<landingPage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            // const DrawerHeader(
-            //   decoration: BoxDecoration(
-            //     color: Colors.blue,
-            //   ),
-            //   child: Text('Movie and TV Series App'),
-            // ),
-
-            UserAccountsDrawerHeader(
-              //membuat gambar profil
-              currentAccountPicture: Image(
-                  image: NetworkImage(
-                "https://e7.pngegg.com/pngimages/178/595/png-clipart-user-profile-computer-icons-login-user-avatars-monochrome-black-thumbnail.png",
-              )),
-              //membuat nama akun
-              accountName: Text(widget.user),
-              //membuat nama email
-              accountEmail: Text("ig:@" + widget.user),
-              //memberikan background
+            const DrawerHeader(
               decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage(
-                          "https://www.travelandleisure.com/thmb/KTIha5CLifSoUD3gx0YP51xc3rY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/blue0517-4dfc85cb0200460ab717b101ac07888f.jpg"),
-                      fit: BoxFit.cover)),
+                color: Colors.blue,
+              ),
+              child: Text('Movie and TV Series',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white)),
             ),
             ListTile(
                 leading: Icon(Icons.movie),
@@ -109,15 +92,6 @@ class _landingPageState extends State<landingPage> {
                 title: const Text('Past Movies'),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (context) => const FilmLama()))),
-            ListTile(
-                leading: Icon(Icons.tv),
-                title: const Text('TV Series'),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const tvScreen()));
-                }),
             new Divider(),
             ListTile(
               leading: Icon(Icons.exit_to_app),

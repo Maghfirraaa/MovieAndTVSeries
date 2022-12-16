@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../model/film.dart';
-import '../viewmodel/home.dart';
+import 'package:mobileapp/model/movie.dart';
+import 'package:mobileapp/view/tvlist.dart';
+import '../viewmodel/tv.dart';
 import 'detailscreen.dart';
+import 'package:http/http.dart' as http;
 
 class homePage extends StatefulWidget {
   // late String param;
@@ -54,44 +56,6 @@ class _homePageState extends State<homePage> {
     );
   }
 
-  // Widget card_blog(String nama, String gambar, String detail,
-  //     AsyncSnapshot<List<Data>> snapshot, int index)
-  Widget card_blog(String nama, String gambar, String detail,
-      AsyncSnapshot<List<Data>> snapshot, int index) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Image.network(
-              snapshot.data![index].gambar,
-              height: 280,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              nama,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              detail,
-              maxLines: 2,
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,63 +69,24 @@ class _homePageState extends State<homePage> {
             height: 24,
           ),
           Text(
-            "Indonesian Favorite Movies",
+            "Top Favorite TV Series",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(
             height: 16,
           ),
           Expanded(
-            child: FutureBuilder<List<Data>>(
-              future: Service.getDataHome(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  if (snapshot.hasError) {
-                    return const Text('Woops something wrong');
-                  } else {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => DetailArtikel(
-                                              judul:
-                                                  snapshot.data![index].judul,
-                                              gambar:
-                                                  snapshot.data![index].gambar,
-                                              detail:
-                                                  snapshot.data![index].detail,
-                                            )));
-                              },
-                              child: card_blog(
-                                  snapshot.data![index].judul,
-                                  snapshot.data![index].gambar,
-                                  snapshot.data![index].detail,
-                                  snapshot,
-                                  index),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                }
-              },
-            ),
-          ),
+              child: FutureBuilder<List<Movie>>(
+            future: fetchTv(http.Client(), 'popular'),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              return snapshot.hasData
+                  ? Tvlist(movie: snapshot.data!)
+                  : Center(child: CircularProgressIndicator());
+            },
+          )),
         ],
       ),
     ));
   }
-
-//   card_blog(nama, gambar, detail, AsyncSnapshot<Map<String, dynamic>> snapshot, int index) {}
 }

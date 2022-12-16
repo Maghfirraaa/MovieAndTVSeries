@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobileapp/view/HomePage.dart';
 import 'package:mobileapp/view/landing.dart';
-import 'package:mobileapp/view/login.dart';
 import '../SharedPref.dart';
 
 Future<void> main() async {
@@ -12,7 +12,8 @@ Future<void> main() async {
 }
 
 class onboarding extends StatefulWidget {
-  const onboarding({Key? key}) : super(key: key);
+  final movie;
+  const onboarding({Key? key, required this.movie}) : super(key: key);
 
   @override
   State<onboarding> createState() => _onboardingState();
@@ -88,8 +89,8 @@ class _onboardingState extends State<onboarding> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                LoginPage(setTheme: setTheme)));
+                            builder: (context) => landingPage(
+                                setTheme: setTheme, movie: widget.movie)));
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

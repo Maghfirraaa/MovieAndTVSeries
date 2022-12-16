@@ -20,7 +20,8 @@ class _SplashScreenState extends State<SplashScreen> {
     new Timer(const Duration(milliseconds: 2000), () {
       setState(() {
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => onboarding()),
+            MaterialPageRoute(
+                builder: (context) => onboarding(movie: widget.setTheme)),
             (route) => false);
       });
     });
